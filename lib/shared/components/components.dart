@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shop_app/shared/styles/colors.dart';
 
 void navigateAndFinish(context, screen) {
@@ -63,4 +64,30 @@ Widget defaultButton(
         ),
       ),
     );
+
+enum toastStates {Success,Error,Warning}
+
+void toastMessage(String msg, toastStates){
+  var color ;
+  switch(toastStates){
+    case 'Success': color = Colors.green;
+      break;
+    case 'Error': color = Colors.red;
+      break;
+    case 'Warning': color = Colors.amber;
+      break;
+
+
+  }
+
+  Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: color,
+      textColor: Colors.white,
+      fontSize: 16.0
+  );
+}
 

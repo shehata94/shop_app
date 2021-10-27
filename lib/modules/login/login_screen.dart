@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shop_app/layout/app_layout_screen.dart';
 import 'package:shop_app/modules/login/cubit/cubit.dart';
 import 'package:shop_app/modules/login/cubit/states.dart';
@@ -21,17 +22,15 @@ class LoginScreen extends StatelessWidget {
           listener: (context, state) {
             if (state is LoginSuccessState) {
               if (state.loginModel.status) {
+                toastMessage(state.loginModel.message, 'Success');
+
                 print(state.loginModel.message);
                 CacheHelper.setData(key: 'token', value: state.loginModel.data.token).then((value) {
                   navigateAndFinish(context, AppLayoutScreen());
                 });
 
-                //Todo
-                //Toast message for success
               } else {
-                //Todo
-                //Toast message for error
-                print(state.loginModel.message);
+                toastMessage(state.loginModel.message, 'Error');
               }
             }
           },
