@@ -5,6 +5,7 @@ import 'package:shop_app/layout/cubit/cubit.dart';
 import 'package:shop_app/modules/login/login_screen.dart';
 import 'package:shop_app/modules/onboard/onboard_screen.dart';
 import 'package:shop_app/modules/register/register_screen.dart';
+import 'package:shop_app/shared/bloc/bloc_observer.dart';
 import 'package:shop_app/shared/components/constants.dart';
 import 'package:shop_app/shared/network/local/cache_helper.dart';
 import 'package:shop_app/shared/network/remote/dio_helper.dart';
@@ -14,6 +15,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CacheHelper.init();
   DioHelper.init();
+  Bloc.observer = MyBlocObserver();
+
 
   Widget widget;
   final onBoarding = CacheHelper.getData(key: 'onBoarding');
@@ -40,7 +43,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-        providers: [BlocProvider(create: (BuildContext context) => LayoutCubit())],
+        providers: [BlocProvider(create: (BuildContext context) => LayoutCubit()..getHomeData())],
         child: MaterialApp(
           title: 'Shop App',
           theme: lightTheme,

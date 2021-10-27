@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/layout/cubit/states.dart';
@@ -35,10 +36,12 @@ class LayoutCubit extends Cubit<LayoutCubitStates>{
   }
 
   HomeModel homeModel;
-  Future<HomeModel> getHomeData() async{
+  Future<Response> getHomeData() async{
     emit(LayoutLoadingState());
-    return await DioHelper.postData(
-        path: Home
+    return await DioHelper.getData(
+      path: Home,
+      token: token,
+      lang: 'en'
     ).then((value){
       homeModel = HomeModel.fromJson(value.data);
       emit(LayoutSuccessState());

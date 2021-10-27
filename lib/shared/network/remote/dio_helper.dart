@@ -20,6 +20,7 @@ class DioHelper {
         String token, String lang
       }) async {
     dio.options.headers = {
+      'Content-Type':'application/json',
       'lang': lang,
       'Authorization': token ?? ''
     };
@@ -34,6 +35,7 @@ class DioHelper {
         String lang
       }) async {
     dio.options.headers = {
+      'Content-Type':'application/json',
       'lang': lang,
       'Authorization': token ?? ''
     };
