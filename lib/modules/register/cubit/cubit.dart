@@ -2,28 +2,30 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/models/login_model.dart';
-import 'package:shop_app/modules/login/cubit/states.dart';
+import 'package:shop_app/modules/register/cubit/states.dart';
 import 'package:shop_app/shared/network/end_points.dart';
 import 'package:shop_app/shared/network/remote/dio_helper.dart';
 
-class LoginCubit extends Cubit<LoginCubitStates> {
-  LoginCubit() : super(LoginInitState());
+class RegisterCubit extends Cubit<RegisterCubitStates> {
+  RegisterCubit() : super(RegisterInitState());
 
-  static LoginCubit get(BuildContext context) => BlocProvider.of(context);
+  static RegisterCubit get(BuildContext context) => BlocProvider.of(context);
 
   LoginModel loginModel;
-  void userLogin(String email, String password) {
-    emit(LoginLoadingState());
+  void userRegister(String name, String email,String phone, String password) {
+    emit(RegisterLoadingState());
 
-    DioHelper.postData(path: Login, lang: 'en', data: {
+    DioHelper.postData(path: 'register', lang: 'en', data: {
+      'name': name,
       'email': email,
+      'phone': phone,
       'password': password,
     }).then((value) {
       loginModel = LoginModel.fromJson(value.data);
-      emit(LoginSuccessState(loginModel));
+      emit(RegisterSuccessState(loginModel));
     }).catchError((error) {
       print(error);
-      emit(LoginErrorState());
+      emit(RegisterErrorState());
     });
   }
 
@@ -33,6 +35,6 @@ class LoginCubit extends Cubit<LoginCubitStates> {
     isPass = !isPass;
 
     isPass ? suffix = Icons.visibility : suffix = Icons.visibility_off;
-    emit(ChangePassVisibility());
+    emit(RegisterChangePassVisibility());
   }
 }

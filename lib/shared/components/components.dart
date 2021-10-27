@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/shared/styles/colors.dart';
 
-void navigateAndReplace(context, screen) {
+void navigateAndFinish(context, screen) {
   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => screen), (route) => false);
+}
+
+void navigateTo(context, screen) {
+  Navigator.push(context, MaterialPageRoute(builder: (context) => screen));
 }
 
 Widget defaultTextForm(
@@ -16,8 +20,12 @@ Widget defaultTextForm(
         Function validate,
         Function suffixPressed,
         Function onTap,
-        Function onChange}) =>
+        Function onChange,
+          String initValue
+
+        }) =>
     TextFormField(
+      initialValue: initValue,
       obscureText: isPassword,
       controller: controller,
       keyboardType: inputType,
@@ -55,3 +63,4 @@ Widget defaultButton(
         ),
       ),
     );
+

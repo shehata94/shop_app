@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shop_app/shared/styles/colors.dart';
 
 ThemeData lightTheme = ThemeData(
   primarySwatch: Colors.orange,
@@ -9,5 +10,14 @@ ThemeData lightTheme = ThemeData(
     backwardsCompatibility: false,
     color: Colors.white,
     elevation: 0.0,
+  ),
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    backgroundColor: Colors.white,
+    unselectedItemColor: greyColor,
+    elevation: 5.0,
+    type: BottomNavigationBarType.fixed,
+
+
+
   ),
 );

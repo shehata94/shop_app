@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/layout/app_layout_screen.dart';
-import 'package:shop_app/modules/login/cubit/cubit.dart';
-import 'package:shop_app/modules/login/cubit/states.dart';
-import 'package:shop_app/modules/register/register_screen.dart';
+import 'package:shop_app/modules/register/cubit/cubit.dart';
+import 'package:shop_app/modules/register/cubit/states.dart';
 import 'package:shop_app/shared/components/components.dart';
 import 'package:shop_app/shared/network/local/cache_helper.dart';
 
-class LoginScreen extends StatelessWidget {
+class RegisterScreen extends StatelessWidget {
   final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+
+    var nameController = TextEditingController();
     var emailController = TextEditingController();
     var passwordController = TextEditingController();
+    var phoneController = TextEditingController();
 
     return BlocProvider(
-        create: (BuildContext context) => LoginCubit(),
-        child: BlocConsumer<LoginCubit, LoginCubitStates>(
+        create: (BuildContext context) => RegisterCubit(),
+        child: BlocConsumer<RegisterCubit, RegisterCubitStates>(
           listener: (context, state) {
-            if (state is LoginSuccessState) {
+            if (state is RegisterSuccessState) {
               if (state.loginModel.status) {
                 print(state.loginModel.message);
                 CacheHelper.setData(key: 'token', value: state.loginModel.data.token).then((value) {
@@ -36,7 +38,7 @@ class LoginScreen extends StatelessWidget {
             }
           },
           builder: (context, state) {
-            var cubit = LoginCubit.get(context);
+            var cubit = RegisterCubit.get(context);
             return Scaffold(
               appBar: AppBar(),
               body: Form(
@@ -49,14 +51,14 @@ class LoginScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "LOGIN",
+                            "Register",
                             style: Theme.of(context).textTheme.headline3,
                           ),
                           SizedBox(
                             height: 10.0,
                           ),
                           Text(
-                            "Login to enter our stores",
+                            "Register to enter our stores",
                             style: TextStyle(
                               color: Colors.grey,
                               fontSize: 18,
@@ -66,18 +68,39 @@ class LoginScreen extends StatelessWidget {
                             height: 20,
                           ),
                           defaultTextForm(
+                              controller: nameController,
+                              inputType: TextInputType.name,
+                              prefix: Icons.person,
+                              label: "User Name",
+                              validate: (String text) {
+                                if (text.isEmpty) {
+                                  return ("User name can\'t be empty");
+                                }
+                              }),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          defaultTextForm(
                               controller: emailController,
                               inputType: TextInputType.emailAddress,
                               prefix: Icons.email_outlined,
                               label: "Email Address",
-                              onSubmit: (value){
-                                if (formKey.currentState.validate()) {
-                                  cubit.userLogin(emailController.text, passwordController.text);
-                                }
-                              },
                               validate: (String text) {
                                 if (text.isEmpty) {
                                   return ("Email address can\'t be empty");
+                                }
+                              }),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          defaultTextForm(
+                              controller: phoneController,
+                              inputType: TextInputType.phone,
+                              prefix: Icons.phone,
+                              label: "Phone Number",
+                              validate: (String text) {
+                                if (text.isEmpty) {
+                                  return ("Phone number can\'t be empty");
                                 }
                               }),
                           SizedBox(
@@ -90,11 +113,6 @@ class LoginScreen extends StatelessWidget {
                               label: "Password",
                               suffix: cubit.suffix,
                               isPassword: cubit.isPass,
-                              onSubmit: (value){
-                                if (formKey.currentState.validate()) {
-                                  cubit.userLogin(emailController.text, passwordController.text);
-                                }
-                              },
                               suffixPressed: () {
                                 cubit.changePassVisibility();
                               },
@@ -106,28 +124,16 @@ class LoginScreen extends StatelessWidget {
                           SizedBox(
                             height: 25,
                           ),
-                          state is LoginLoadingState
+                          state is RegisterLoadingState
                               ? Center(child: RefreshProgressIndicator())
                               : defaultButton(
-                                  label: "LOGIN",
-                                  onPressed: () {
-                                    if (formKey.currentState.validate()) {
-                                      cubit.userLogin(emailController.text, passwordController.text);
-                                    }
-                                  }),
-                          SizedBox(
-                            height: 25,
-                          ),
-                          Row(
-                            children: [
-                              Text("Don\'t have an account?"),
-                              TextButton(
-                                  onPressed: () {
-                                    navigateTo(context, RegisterScreen());
-                                  },
-                                  child: Text("Register Now"))
-                            ],
-                          ),
+                              label: "Register",
+                              onPressed: () {
+                                if (formKey.currentState.validate()) {
+                                  cubit.userRegister(nameController.text,emailController.text,phoneController.text, passwordController.text);
+                                }
+                              }),
+
                         ],
                       ),
                     ),
