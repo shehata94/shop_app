@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-        providers: [BlocProvider(create: (BuildContext context) => LayoutCubit()..getHomeData())],
+        providers: [BlocProvider(create: (BuildContext context) => LayoutCubit()..getHomeData()..getCategoriesData())],
         child: MaterialApp(
           title: 'Shop App',
           theme: lightTheme,

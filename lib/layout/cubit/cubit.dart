@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/layout/cubit/states.dart';
+import 'package:shop_app/models/categories_model.dart';
 import 'package:shop_app/models/home_model.dart';
 import 'package:shop_app/modules/categories/categories_screen.dart';
 import 'package:shop_app/modules/favourites/favourites_screen.dart';
@@ -36,6 +37,8 @@ class LayoutCubit extends Cubit<LayoutCubitStates>{
   }
 
   HomeModel homeModel;
+  CategoriesModel categoriesModel;
+
   Future<Response> getHomeData() async{
     emit(LayoutLoadingState());
     return await DioHelper.getData(
@@ -48,6 +51,22 @@ class LayoutCubit extends Cubit<LayoutCubitStates>{
     }).catchError((error){
       print(error);
       emit(LayoutErrorState());
+    });
+
+  }
+
+  Future<Response> getCategoriesData() async{
+    emit(LayoutLoadingState());
+    return await DioHelper.getData(
+        path: Categories,
+        token: token,
+        lang: 'en'
+    ).then((value){
+      categoriesModel = CategoriesModel.fromJson(value.data);
+      emit(LayoutCategoriesSuccessState());
+    }).catchError((error){
+      print(error);
+      emit(LayoutCategoriesErrorState());
     });
 
   }
