@@ -89,5 +89,7 @@ void toastMessage(String msg, toastStates){
       textColor: Colors.white,
       fontSize: 16.0
   );
+
+
 }
 
