@@ -23,3 +23,13 @@ class LayoutFavouritesLoadingState extends LayoutCubitStates{}
 class LayoutFavouritesSuccessState extends LayoutCubitStates{}
 
 class LayoutFavouritesErrorState extends LayoutCubitStates{}
+
+class LayoutUserDataSuccessState extends LayoutCubitStates{}
+
+class LayoutUserDataErrorState extends LayoutCubitStates{}
+
+class LayoutUpdateUserLoadingState extends LayoutCubitStates{}
+
+class LayoutUpdateUserSuccessState extends LayoutCubitStates{}
+
+class LayoutUpdateUserErrorState extends LayoutCubitStates{}

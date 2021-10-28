@@ -6,6 +6,7 @@ import 'package:shop_app/modules/login/cubit/cubit.dart';
 import 'package:shop_app/modules/login/cubit/states.dart';
 import 'package:shop_app/modules/register/register_screen.dart';
 import 'package:shop_app/shared/components/components.dart';
+import 'package:shop_app/shared/components/constants.dart';
 import 'package:shop_app/shared/network/local/cache_helper.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -26,9 +27,10 @@ class LoginScreen extends StatelessWidget {
 
                 print(state.loginModel.message);
                 CacheHelper.setData(key: 'token', value: state.loginModel.data.token).then((value) {
+                  // Important when you logout so you should have the token saved when login again as token saved only in main initialization
+                  token = state.loginModel.data.token;
                   navigateAndFinish(context, AppLayoutScreen());
                 });
-
               } else {
                 toastMessage(state.loginModel.message, 'Error');
               }

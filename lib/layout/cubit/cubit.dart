@@ -7,6 +7,7 @@ import 'package:shop_app/models/categories_model.dart';
 import 'package:shop_app/models/change_favourites_model.dart';
 import 'package:shop_app/models/favourites_model.dart';
 import 'package:shop_app/models/home_model.dart';
+import 'package:shop_app/models/login_model.dart';
 import 'package:shop_app/modules/categories/categories_screen.dart';
 import 'package:shop_app/modules/favourites/favourites_screen.dart';
 import 'package:shop_app/modules/products/products_screen.dart';
@@ -120,4 +121,47 @@ else{
     });
   }
 
+LoginModel loginModel;
+  Future<Response> getUserData() async{
+
+    return await DioHelper.getData(
+        path: Profile,
+        token: token,
+        lang: 'en'
+    ).then((value) {
+      loginModel = LoginModel.fromJson(value.data);
+      emit(LayoutUserDataSuccessState());
+      print(favouritesModel.data.data.length);
+    }).catchError((error){
+      print(error);
+      emit(LayoutUserDataErrorState());
+
+    });
+  }
+
+  Future<Response> updateUserData({
+    @required String name,
+    @required String email,
+    @required String phone
+}) async{
+    emit(LayoutUpdateUserLoadingState());
+    return await DioHelper.putData(
+        path: update_profile,
+        token: token,
+        lang: 'en',
+      data: {
+          'name': name,
+          'email': email,
+          'phone':phone
+      }
+    ).then((value) {
+      loginModel = LoginModel.fromJson(value.data);
+      emit(LayoutUserDataSuccessState());
+      print(favouritesModel.data.data.length);
+    }).catchError((error){
+      print(error);
+      emit(LayoutUserDataErrorState());
+
+    });
+  }
 }
