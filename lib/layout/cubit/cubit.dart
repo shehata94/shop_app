@@ -15,63 +15,87 @@ import 'package:shop_app/shared/components/constants.dart';
 import 'package:shop_app/shared/network/end_points.dart';
 import 'package:shop_app/shared/network/remote/dio_helper.dart';
 
-class LayoutCubit extends Cubit<LayoutCubitStates> {
+class LayoutCubit extends Cubit<LayoutCubitStates>{
+
   LayoutCubit() : super(LayoutInitState());
 
   static LayoutCubit get(BuildContext context) => BlocProvider.of(context);
 
   int currentIndex = 0;
 
-  List<Widget> bottomScreens = [ProductsScreen(), CategoriesScreen(), FavouritesScreen(), SettingsScreen()];
+  List<Widget> bottomScreens =
+  [
+    ProductsScreen(),
+    CategoriesScreen(),
+    FavouritesScreen(),
+    SettingsScreen()
+  ];
 
-  void changeCurrentIndex(int index) {
-    currentIndex = index;
+  void changeCurrentIndex(int index){
+
+    currentIndex= index;
     emit(LayoutBottomNavBarChangeState());
+
   }
 
   HomeModel homeModel;
   CategoriesModel categoriesModel;
-  Map<int, bool> favourites = {};
+  Map<int , bool> favourites = {};
 
-  Future<Response> getHomeData() async {
+  Future<Response> getHomeData() async{
     emit(LayoutLoadingState());
     print(token);
-    return await DioHelper.getData(path: Home, token: token, lang: 'en').then((value) {
+    return await DioHelper.getData(
+      path: Home,
+      token: token,
+      lang: 'en'
+    ).then((value){
       homeModel = HomeModel.fromJson(value.data);
       homeModel.data.products.forEach((e) => {
-            favourites.addAll({e.id: e.inFavourites})
-          });
+        favourites.addAll({e.id:e.inFavourites})
+      });
       print(favourites.toString());
       emit(LayoutSuccessState());
-    }).catchError((error) {
+    }).catchError((error){
       print(error);
       emit(LayoutErrorState());
     });
+
   }
 
-  Future<Response> getCategoriesData() async {
+  Future<Response> getCategoriesData() async{
     emit(LayoutLoadingState());
-    return await DioHelper.getData(path: Categories, token: token, lang: 'en').then((value) {
+    return await DioHelper.getData(
+        path: Categories,
+        token: token,
+        lang: 'en'
+    ).then((value){
       categoriesModel = CategoriesModel.fromJson(value.data);
       emit(LayoutCategoriesSuccessState());
-    }).catchError((error) {
+    }).catchError((error){
       print(error);
       emit(LayoutCategoriesErrorState());
     });
   }
 
-  ChangeFavouritesModel changeFavouritesModel;
-  Future<Response> changeFavourites(ProductModel model) async {
+ChangeFavouritesModel changeFavouritesModel;
+  Future<Response> changeFavourites(ProductModel model) async{
     favourites[model.id] = !favourites[model.id];
-    return await DioHelper.postData(path: Favourites, data: {'product_id': model.id}, lang: 'en').then((value) {
+    return await DioHelper.postData(
+        path: Favourites,
+        data: {
+          'product_id' : model.id
+        },
+        token: token,
+        lang: 'en'
+    ).then((value){
       changeFavouritesModel = ChangeFavouritesModel.fromJson(value.data);
-      if (changeFavouritesModel.status != true) {
-        favourites[model.id] = !favourites[model.id];
-      } else {
+      if(changeFavouritesModel.status != true) {favourites[model.id] = !favourites[model.id];}
+else{
         getFavourites();
       }
-      emit(LayoutChangeFavouritesSuccessState());
-    }).catchError((error) {
+    emit(LayoutChangeFavouritesSuccessState());
+    }).catchError((error){
       favourites[model.id] = !favourites[model.id];
       print(error);
       emit(LayoutChangeFavouritesErrorState());
@@ -79,15 +103,21 @@ class LayoutCubit extends Cubit<LayoutCubitStates> {
   }
 
   FavouritesModel favouritesModel;
-  Future<Response> getFavourites() async {
+  Future<Response> getFavourites() async{
     emit(LayoutFavouritesLoadingState());
-    return await DioHelper.getData(path: Favourites, token: token, lang: 'en').then((value) {
+    return await DioHelper.getData(
+      path: Favourites,
+      token: token,
+      lang: 'en'
+    ).then((value) {
       favouritesModel = FavouritesModel.fromJson(value.data);
       emit(LayoutFavouritesSuccessState());
       print(favouritesModel.data.data.length);
-    }).catchError((error) {
+    }).catchError((error){
       print(error);
       emit(LayoutFavouritesErrorState());
+
     });
   }
+
 }
