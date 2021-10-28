@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/layout/cubit/cubit.dart';
 import 'package:shop_app/layout/cubit/states.dart';
 import 'package:shop_app/models/categories_model.dart';
+import 'package:shop_app/shared/components/components.dart';
 
 class CategoriesScreen extends StatelessWidget {
   @override
@@ -14,10 +15,7 @@ class CategoriesScreen extends StatelessWidget {
         return cubit.categoriesModel != null
             ? ListView.separated(
                 itemBuilder: (context, index) => categoryItem(cubit.categoriesModel.data.data[index]),
-                separatorBuilder: (context, index) => Container(
-                      height: 1,
-                      color: Colors.grey,
-                    ),
+                separatorBuilder: (context, index) => divider(),
                 itemCount: cubit.categoriesModel.data.data.length
         )
             : Center(

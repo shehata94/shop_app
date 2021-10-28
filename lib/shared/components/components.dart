@@ -93,3 +93,8 @@ void toastMessage(String msg, toastStates){
 
 }
 
+Widget divider() =>Container(
+  height: 1,
+  color: Colors.grey,
+);
+

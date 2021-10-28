@@ -13,15 +13,16 @@ class ProductsScreen extends StatelessWidget {
     return BlocConsumer<LayoutCubit, LayoutCubitStates>(
         listener: (context, state) {},
         builder: (context, state) {
-          var cubit = LayoutCubit.get(context);
+          LayoutCubit cubit = LayoutCubit.get(context);
           return cubit.homeModel != null && cubit.categoriesModel != null
-              ? productsBuilder(context,cubit.homeModel,cubit.categoriesModel)
-              : Center(child: CircularProgressIndicator(),);
-        }
-    );
+              ? productsBuilder(context, cubit.homeModel, cubit.categoriesModel,cubit)
+              : Center(
+                  child: CircularProgressIndicator(),
+                );
+        });
   }
 
-  Widget productsBuilder(context, HomeModel model, CategoriesModel categoriesModel) {
+  Widget productsBuilder(context, HomeModel model, CategoriesModel categoriesModel,LayoutCubit cubit) {
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
       child: Padding(
@@ -30,11 +31,12 @@ class ProductsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CarouselSlider(
-                items: model.data.banners.map((e) =>
-                    Image(
-                      image: NetworkImage(e.image),
-                      width: double.infinity,
-                    )).toList(),
+                items: model.data.banners
+                    .map((e) => Image(
+                          image: NetworkImage(e.image),
+                          width: double.infinity,
+                        ))
+                    .toList(),
                 options: CarouselOptions(
                   height: 200,
                   aspectRatio: 16 / 9,
@@ -49,29 +51,36 @@ class ProductsScreen extends StatelessWidget {
                   enlargeCenterPage: false,
                   scrollDirection: Axis.horizontal,
                 )),
-            SizedBox(height: 15,),
-            Text('Categories',
-              style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.w700
-              ),),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 15,
+            ),
+            Text(
+              'Categories',
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
+            ),
+            SizedBox(
+              height: 10,
+            ),
             Container(
               height: 100,
               child: ListView.separated(
-                scrollDirection: Axis.horizontal,
+                  scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) => categoriesItem(categoriesModel.data.data[index]),
-                  separatorBuilder: (context,index) => SizedBox(width: 5,),
-                  itemCount: categoriesModel.data.data.length
-              ),
+                  separatorBuilder: (context, index) => SizedBox(
+                        width: 5,
+                      ),
+                  itemCount: categoriesModel.data.data.length),
             ),
-            SizedBox(height: 15,),
-            Text('Products',
-              style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.w700
-              ),),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 15,
+            ),
+            Text(
+              'Products',
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w700),
+            ),
+            SizedBox(
+              height: 10,
+            ),
             Container(
               color: Colors.grey[300],
               child: GridView.builder(
@@ -81,11 +90,10 @@ class ProductsScreen extends StatelessWidget {
                   crossAxisSpacing: 1,
                   mainAxisSpacing: 1,
                 ),
-                itemBuilder: (BuildContext context, index) => gridItemBuilder(model.data.products[index]),
+                itemBuilder: (BuildContext context, index) => gridItemBuilder(model.data.products[index],cubit),
                 itemCount: model.data.products.length,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-
               ),
             )
           ],
@@ -94,10 +102,10 @@ class ProductsScreen extends StatelessWidget {
     );
   }
 
-  Widget gridItemBuilder(ProductModel model) {
+  Widget gridItemBuilder(ProductModel model,LayoutCubit cubit) {
     return Container(
+      padding: EdgeInsets.all(8),
       color: Colors.white,
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.end,
@@ -105,7 +113,6 @@ class ProductsScreen extends StatelessWidget {
           Stack(
             alignment: Alignment.bottomLeft,
             children: [
-
               Image(
                 image: NetworkImage(model.image),
                 width: double.infinity,
@@ -113,46 +120,63 @@ class ProductsScreen extends StatelessWidget {
               ),
               model.discount != 0
                   ? Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 5),
-                  color: Colors.red,
-                  child: Text('DISCOUNT',
-                    style: TextStyle(
-                        color: Colors.white
-                    ),),
-                ),
-              )
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 5),
+                        color: Colors.red,
+                        child: Text(
+                          'DISCOUNT',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    )
                   : SizedBox(),
             ],
           ),
-          Text(model.name, maxLines: 2,),
-          SizedBox(height: 10,),
+          Text(
+            model.name,
+            maxLines: 2,
+          ),
+          SizedBox(
+            height: 10,
+          ),
           Row(
             children: [
-              Text('${model.price}',
-
+              Text(
+                '${model.price}',
                 style: TextStyle(
                   color: primaryColor,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-
-                ),),
-              SizedBox(width: 5,),
-              model.discount != 0 ? Text('${model.oldPrice}',
-                style: TextStyle(
-                    color: primaryColor,
-                    decoration: TextDecoration.lineThrough
-                ),) : SizedBox(width: 10,),
+                ),
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              model.discount != 0
+                  ? Text(
+                      '${model.oldPrice}',
+                      style: TextStyle(color: primaryColor, decoration: TextDecoration.lineThrough),
+                    )
+                  : SizedBox(
+                      width: 10,
+                    ),
               Spacer(),
-              IconButton(onPressed: () {},
-                  icon: Icon(Icons.favorite_border,
-                  )
+              CircleAvatar(
+                radius: 20,
+                backgroundColor: cubit.favourites[model.id]? primaryColor: Colors.grey,
+                child: IconButton(
+                    onPressed: () {
+                      cubit.changeFavourites(model);
+                    },
+                    icon: Icon(
+                      Icons.favorite_border,
+                      color: Colors.white,
+                    )),
               )
             ],
           )
         ],
-
       ),
     );
   }
@@ -162,15 +186,16 @@ class ProductsScreen extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       children: [
         Image(
-          image: NetworkImage(categoryItemModel.image), height: 100,
+          image: NetworkImage(categoryItemModel.image),
+          height: 100,
         ),
         Container(
           padding: EdgeInsets.all(5),
           color: Colors.black.withOpacity(0.8),
-          child: Text(categoryItemModel.name,
-            style: TextStyle(
-                color: Colors.white
-            ),),
+          child: Text(
+            categoryItemModel.name,
+            style: TextStyle(color: Colors.white),
+          ),
         )
       ],
     );

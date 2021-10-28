@@ -13,3 +13,13 @@ class LayoutErrorState extends LayoutCubitStates{}
 class LayoutCategoriesSuccessState extends LayoutCubitStates{}
 
 class LayoutCategoriesErrorState extends LayoutCubitStates{}
+
+class LayoutChangeFavouritesSuccessState extends LayoutCubitStates{}
+
+class LayoutChangeFavouritesErrorState extends LayoutCubitStates{}
+
+class LayoutFavouritesLoadingState extends LayoutCubitStates{}
+
+class LayoutFavouritesSuccessState extends LayoutCubitStates{}
+
+class LayoutFavouritesErrorState extends LayoutCubitStates{}
