@@ -113,6 +113,11 @@ class RegisterScreen extends StatelessWidget {
                               label: "Password",
                               suffix: cubit.suffix,
                               isPassword: cubit.isPass,
+                              onSubmit: (value){
+                                if (formKey.currentState.validate()) {
+                                  cubit.userRegister(nameController.text,emailController.text,phoneController.text, passwordController.text);
+                                }
+                              },
                               suffixPressed: () {
                                 cubit.changePassVisibility();
                               },

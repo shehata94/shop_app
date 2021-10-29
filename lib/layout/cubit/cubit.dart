@@ -156,6 +156,7 @@ LoginModel loginModel;
       }
     ).then((value) {
       loginModel = LoginModel.fromJson(value.data);
+      token = loginModel.data.token;
       emit(LayoutUserDataSuccessState());
       print(favouritesModel.data.data.length);
     }).catchError((error){

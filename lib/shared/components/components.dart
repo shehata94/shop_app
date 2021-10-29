@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shop_app/models/home_model.dart';
 import 'package:shop_app/shared/styles/colors.dart';
 
 void navigateAndFinish(context, screen) {
@@ -96,5 +97,90 @@ void toastMessage(String msg, toastStates){
 Widget divider() =>Container(
   height: 1,
   color: Colors.grey,
+);
+
+Widget listItem( model,  cubit, {bool isSearch = true}) => Padding(
+  padding: const EdgeInsets.all(10.0),
+  child: Row(
+    children: [
+      Container(
+        height: 130,
+        width: 130,
+        child: Stack(
+          children: [
+            Image(
+              image: NetworkImage(model.image),
+              width: 130,
+              height: 130,
+            ),
+            model.discount != 0 && isSearch
+                ? Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 5),
+                color: Colors.red,
+                child: Text(
+                  'DISCOUNT',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            )
+                : SizedBox(),
+          ],
+        ),
+      ),
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              model.name,
+              maxLines: 2,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: [
+                Text(
+                  '${model.price}',
+                  style: TextStyle(
+                    color: primaryColor,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                model.discount != 0 && isSearch
+                    ? Text(
+                  '${model.oldPrice}',
+                  style: TextStyle(color: primaryColor, decoration: TextDecoration.lineThrough),
+                )
+                    : SizedBox(
+                  width: 10,
+                ),
+                Spacer(),
+                CircleAvatar(
+                  radius: 20,
+                   backgroundColor: cubit.favourites[model.id]? primaryColor: Colors.grey,
+                  child: IconButton(
+                      onPressed: () {
+                        cubit.changeFavourites(model);
+                      },
+                      icon: Icon(
+                        Icons.favorite_border,
+                        color: Colors.white,
+                      )),
+                )
+              ],
+            ),
+          ],
+        ),
+      )
+    ],
+  ),
 );
 

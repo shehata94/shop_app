@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/models/login_model.dart';
 import 'package:shop_app/modules/register/cubit/states.dart';
+import 'package:shop_app/shared/components/constants.dart';
 import 'package:shop_app/shared/network/end_points.dart';
 import 'package:shop_app/shared/network/remote/dio_helper.dart';
 
@@ -22,6 +23,7 @@ class RegisterCubit extends Cubit<RegisterCubitStates> {
       'password': password,
     }).then((value) {
       loginModel = LoginModel.fromJson(value.data);
+      token = loginModel.data.token;
       emit(RegisterSuccessState(loginModel));
     }).catchError((error) {
       print(error);
