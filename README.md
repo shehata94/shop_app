@@ -1,16 +1,22 @@
-# shop_app
 
-shop app
+<img src="https://user-images.githubusercontent.com/92920178/145258215-fc7e5b1f-1b19-480e-acab-efda1de104d8.png" alt='' border=”0” style=”display:block;” width="100%" />
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+<img src="https://user-images.githubusercontent.com/92920178/145258225-1e72d359-f4f0-4f98-a053-331a4a65d40f.gif" alt='' border=”0” style=”display:block;” height="500"  align='right'/>
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+<br>
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Shop app 
+
+This project is a practice to learn how to use Bloc state mangement and Dio package
+
+
+## Technical features
+
+- POST, PUT and Get data from https://student.valuxapps.com/api/  
+- Onboarding screens
+- Login and register pages to authorize the user 
+- Set, Get and clear data from shared preferences
+- Search database feature 
+- Create multiple models
